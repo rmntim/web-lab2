@@ -25,7 +25,16 @@ function initCanvas() {
         }
     });
 
-    drawShape(ctx, canvas);
+    fetch("points")
+        .then((resp) => {
+            if (!resp.ok) {
+                throw new Error("Failed to fetch points");
+            }
+
+            return resp.json();
+        })
+        .then((points) => drawShape(ctx, canvas, points))
+        .catch(() => drawShape(ctx, canvas, []));
 }
 
 /**
@@ -54,8 +63,9 @@ function sendPoint(x, y, r) {
  * Draws graph on canvas
  * @param ctx {CanvasRenderingContext2D}
  * @param canvas {HTMLCanvasElement}
+ * @param points {{x: number, y: number, r: number}[]}
  */
-function drawShape(ctx, canvas) {
+function drawShape(ctx, canvas, points) {
     const R = 100;
 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -91,6 +101,19 @@ function drawShape(ctx, canvas) {
     ctx.moveTo(0, -canvas.height / 2);
     ctx.lineTo(0, canvas.height / 2);
     ctx.stroke();
+
+    ctx.fillStyle = "white";
+
+    points.forEach((point) => {
+        const { x, y, r } = point;
+
+        const scaledX = (x / r) * R;
+        const scaledY = (y / r) * R;
+
+        ctx.beginPath();
+        ctx.arc(scaledX, scaledY, 5, 0, Math.PI * 2);
+        ctx.fill();
+    });
 
     ctx.setTransform(1, 0, 0, 1, 0, 0);
 
