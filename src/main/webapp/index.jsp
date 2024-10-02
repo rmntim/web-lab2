@@ -56,7 +56,12 @@
                 <label><input type="radio" name="r" value="3">3</label>
             </fieldset>
 
-            <button type="submit">Submit</button>
+            <div>
+                <button type="submit">Submit</button>
+                <button id="result-button">
+                    <a href="result.jsp">Table</a>
+                </button>
+            </div>
         </form>
     </section>
     <section>
