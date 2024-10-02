@@ -65,7 +65,7 @@
         </form>
     </section>
     <section>
-        <canvas id="graph" width="400" height="400"></canvas>
+        <canvas id="graph" width="600" height="600"></canvas>
     </section>
 </main>
 <footer id="copyright">all rights belong to ur mom,&nbsp;

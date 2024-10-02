@@ -1,7 +1,9 @@
+const SCALE_FACTOR = 100;
+
 /**
  * Initializes graph canvas
  */
-function initCanvas() {
+async function initCanvas() {
     /** @type {HTMLCanvasElement} */
     const canvas = document.getElementById("graph");
     /** @type {CanvasRenderingContext2D} */
@@ -14,9 +16,9 @@ function initCanvas() {
 
         try {
             const r = getR();
-            const x = (xDom / 100) * (r / (canvas.width / 4));
-            const y = (yDom / 100) * (r / (canvas.height / 4));
-            sendPoint(x, y, r);
+            const x = xDom * ((4 * r) / canvas.width);
+            const y = yDom * ((4 * r) / canvas.height);
+            sendPoint(x / r, y / r, r);
         } catch (e) {
             /** @type {HTMLDivElement} */
             const errorDiv = document.getElementById("error");
@@ -25,16 +27,31 @@ function initCanvas() {
         }
     });
 
-    fetch("points")
-        .then((resp) => {
-            if (!resp.ok) {
-                throw new Error("Failed to fetch points");
-            }
+    try {
+        const resp = await fetch("points");
+        if (!resp.ok) {
+            throw new Error("Failed to fetch points");
+        }
 
-            return resp.json();
-        })
-        .then((points) => drawShape(ctx, canvas, points))
-        .catch(() => drawShape(ctx, canvas, []));
+        const points = await resp.json();
+
+        document
+            .querySelectorAll("input[type='radio'][name='r']")
+            .forEach((radio) =>
+                radio.addEventListener("click", () =>
+                    drawShape(
+                        ctx,
+                        canvas,
+                        points,
+                        Number(radio.value) * SCALE_FACTOR
+                    )
+                )
+            );
+
+        drawShape(ctx, canvas, points, SCALE_FACTOR);
+    } catch (e) {
+        drawShape(ctx, canvas, [], SCALE_FACTOR);
+    }
 }
 
 /**
@@ -65,9 +82,7 @@ function sendPoint(x, y, r) {
  * @param canvas {HTMLCanvasElement}
  * @param points {{x: number, y: number, r: number}[]}
  */
-function drawShape(ctx, canvas, points) {
-    const R = 100;
-
+function drawShape(ctx, canvas, points, R) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     ctx.translate(canvas.width / 2, canvas.height / 2);
@@ -105,26 +120,25 @@ function drawShape(ctx, canvas, points) {
     ctx.fillStyle = "white";
 
     points.forEach((point) => {
-        const { x, y, r } = point;
-
-        const scaledX = (x / r) * R;
-        const scaledY = (y / r) * R;
+        const { x, y } = point;
 
         ctx.beginPath();
-        ctx.arc(scaledX, scaledY, 5, 0, Math.PI * 2);
+        ctx.arc(x * SCALE_FACTOR, y * SCALE_FACTOR, 5, 0, Math.PI * 2);
         ctx.fill();
     });
 
-    ctx.setTransform(1, 0, 0, 1, 0, 0);
-
+    ctx.scale(1, -1);
     ctx.fillStyle = "white";
     ctx.font = "12px monospace";
-    ctx.fillText("R", canvas.width / 2 + 6, canvas.height / 2 - R);
-    ctx.fillText("R/2", canvas.width / 2 + 6, canvas.height / 2 - R / 2);
-    ctx.fillText("R", canvas.width / 2 + R - 6, canvas.height / 2 + 12);
-    ctx.fillText("R/2", canvas.width / 2 + R / 2 - 6, canvas.height / 2 + 12);
-    ctx.fillText("-R/2", canvas.width / 2 - R / 2 - 12, canvas.height / 2 + 12);
-    ctx.fillText("-R", canvas.width / 2 - R - 12, canvas.height / 2 + 15);
-    ctx.fillText("-R/2", canvas.width / 2 + 6, canvas.height / 2 + R / 2 + 6);
-    ctx.fillText("-R", canvas.width / 2 + 6, canvas.height / 2 + R + 6);
+    ctx.fillText("R", R, -6);
+    ctx.fillText("R/2", R / 2, -6);
+    ctx.fillText("-R/2", -R / 2, -6);
+    ctx.fillText("-R", -R, -6);
+
+    ctx.fillText("R", 6, -R);
+    ctx.fillText("R/2", 6, -R / 2);
+    ctx.fillText("-R/2", 6, R / 2);
+    ctx.fillText("-R", 6, R);
+
+    ctx.translate(-canvas.width / 2, -canvas.height / 2);
 }

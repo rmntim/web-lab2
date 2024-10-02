@@ -13,7 +13,7 @@ function getR() {
     if (rs.length !== 1) {
         throw new Error("Exactly one r must be checked");
     }
-    return 100 * Number(rs[0].value);
+    return Number(rs[0].value);
 }
 
 /**
