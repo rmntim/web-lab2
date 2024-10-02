@@ -7,7 +7,9 @@ const VALID_RS = new Set([1, 1.5, 2, 2.5, 3]);
  * @throws {Error} If no R is checked or multiple Rs are checked (should be impossible but why not)
  */
 function getR() {
-    const rs = Array.from(document.getElementsByName("r")).filter(el => el.checked);
+    const rs = Array.from(document.getElementsByName("r")).filter(
+        (el) => el.checked
+    );
     if (rs.length !== 1) {
         throw new Error("Exactly one r must be checked");
     }
@@ -25,21 +27,12 @@ function roundHalf(num) {
 
 /**
  * Checks that only one X checkbox is checked.
+ * @param self {HTMLInputElement}
  * @returns {boolean}
  */
-function checkX() {
-    /** @type {NodeListOf<HTMLInputElement>} */
-    const checkboxes = document.querySelectorAll("input[type='checkbox'][name^='x-']");
-    let checked = false;
-
-    for (let i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) {
-            if (checked) {
-                return false;
-            }
-            checked = true;
-        }
-    }
-
-    return true;
+function checkX(self) {
+    document
+        .querySelectorAll("input[type='checkbox'][name='x']")
+        .forEach((checkbox) => (checkbox.checked = false));
+    self.checked = true;
 }

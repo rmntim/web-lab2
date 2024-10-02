@@ -36,7 +36,7 @@
             </thead>
             <tbody>
             <%
-                PointRepository repo = (PointRepository) request.getSession().getAttribute("bean");
+                PointRepository repo = (PointRepository) session.getAttribute("bean");
                 if (repo != null) {
                     for (Point point : repo.getPoints()) {
             %>

@@ -14,12 +14,8 @@ function initCanvas() {
 
         try {
             const r = getR();
-            const x = roundHalf(
-                Math.round(xDom * (r / (canvas.width / 4))) / 100
-            );
-            const y = roundHalf(
-                Math.round(yDom * (r / (canvas.height / 4))) / 100
-            );
+            const x = (xDom / 100) * (r / (canvas.width / 4));
+            const y = (yDom / 100) * (r / (canvas.height / 4));
             sendPoint(x, y, r);
         } catch (e) {
             /** @type {HTMLDivElement} */
@@ -42,19 +38,11 @@ function sendPoint(x, y, r) {
     /** @type {HTMLFormElement} */
     const form = document.getElementById("data-form");
 
-    let didCheckX = false;
-    for (/** @type {HTMLInputElement} */ const checkbox of form["x"]) {
-        if (checkbox.value === x.toString()) {
-            checkbox.checked = true;
-            didCheckX = true;
-        } else {
-            checkbox.checked = false;
-        }
-    }
-
-    if (!didCheckX) {
-        throw new Error("x is invalid");
-    }
+    /** @type {HTMLInputElement} */
+    const customX = document.getElementById("custom-x");
+    customX.value = x.toString();
+    customX.disabled = false;
+    checkX(customX);
 
     form["y"].value = y;
     form["r"].value = r;

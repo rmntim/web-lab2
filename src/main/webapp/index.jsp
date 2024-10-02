@@ -32,15 +32,16 @@
         <form action="${pageContext.request.contextPath}/controller" method="post" id="data-form">
             <label for="xs">Select X:</label>
             <fieldset id="xs">
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="-2">-2</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="-1.5">-1.5</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="-1">-1</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="-0.5">-0.5</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="0">0</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="0.5">0.5</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="1">1</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="1.5">1.5</label>
-                <label><input type="checkbox" name="x" onclick="return checkX();" value="2">2</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="-2">-2</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="-1.5">-1.5</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="-1">-1</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="-0.5">-0.5</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="0">0</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="0.5">0.5</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="1">1</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="1.5">1.5</label>
+                <label><input type="checkbox" name="x" onclick="checkX(this)" value="2">2</label>
+                <label><input type="checkbox" name="x" id="custom-x" disabled>Custom</label>
             </fieldset>
 
             <label for="y">Enter Y:</label>
