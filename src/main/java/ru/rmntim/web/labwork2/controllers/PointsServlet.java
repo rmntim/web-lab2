@@ -25,6 +25,7 @@ public class PointsServlet extends HttpServlet {
         var bean = (PointRepository) request.getSession().getAttribute("bean");
         if (bean == null) {
             response.getWriter().write("[]");
+            return;
         }
 
         var json = JsonbBuilder.create().toJson(bean.getPoints());
