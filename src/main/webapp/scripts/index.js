@@ -52,9 +52,43 @@ function validateInput(values) {
     }
 }
 
+/**
+ * Uploads an image to the server
+ *
+ * @param {HTMLInputElement} input
+ */
+function upload(input) {
+    const file = input.files[0];
+    const reader = new FileReader();
+    reader.onload = function (event) {
+        const base64String = event.target.result;
+        localStorage.setItem("image", base64String);
+        setCanvasBackground(base64String);
+    };
+    reader.readAsDataURL(file);
+}
+
+/**
+ * Sets the background of the canvas to the image in the base64 string
+ *
+ * @param {string} base64String
+ */
+function setCanvasBackground(base64String) {
+    /** @type {HTMLCanvasElement} */
+    const canvas = document.getElementById("graph");
+    const ctx = canvas.getContext("2d");
+    const image = document.getElementById("canvas-bg");
+    image.src = base64String;
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     /** @type {HTMLFormElement} */
     const form = document.getElementById("data-form");
     form.addEventListener("submit", submit);
     initCanvas();
+
+    const bgImage = localStorage.getItem("image");
+    if (bgImage) {
+        setCanvasBackground(bgImage);
+    }
 });

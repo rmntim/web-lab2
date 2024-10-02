@@ -61,11 +61,15 @@
                 <button id="result-button">
                     <a href="result.jsp">Table</a>
                 </button>
+                <input type="file" id="image-upload" onchange="upload(this)" name="image" accept="image/*">
             </div>
         </form>
     </section>
     <section>
+    <div style="position: relative; width: 600px; height: 600px;">
+        <img id="canvas-bg" style="z-index: -1; position: absolute; top: 0; left: 0; width: 100%; height: 100%;">
         <canvas id="graph" width="600" height="600"></canvas>
+    </div>
     </section>
 </main>
 <footer id="copyright">all rights belong to ur mom,&nbsp;
