@@ -14,10 +14,6 @@ import java.util.stream.DoubleStream;
 @WebServlet("/controller")
 public class ControllerServlet extends HttpServlet {
     private static final String ERROR_MSG = "Incorrect data provided: %s";
-    // vieboni
-    private static final Set<Double> ALLOWED_X = DoubleStream
-            .iterate(-2, i -> i <= 2, i -> i + .5)
-            .boxed().collect(Collectors.toSet());
 
     private static final Set<Double> ALLOWED_R = DoubleStream
             .iterate(1, i -> i <= 3, i -> i + .5)
@@ -48,15 +44,8 @@ public class ControllerServlet extends HttpServlet {
                 return;
             }
 
-            var dx = Double.parseDouble(x);
             var dy = Double.parseDouble(y);
             var dr = Double.parseDouble(r);
-
-            if (!ALLOWED_X.contains(dx)) {
-                request.setAttribute("error", String.format(ERROR_MSG, "x must be in " + ALLOWED_X));
-                request.getRequestDispatcher("./error.jsp").forward(request, response);
-                return;
-            }
 
             if (!ALLOWED_R.contains(dr)) {
                 request.setAttribute("error", String.format(ERROR_MSG, "r must be in " + ALLOWED_R));
